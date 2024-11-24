@@ -1,7 +1,12 @@
 package com.example.gemerador.Inicio_User;
 
+import android.Manifest;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,6 +20,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.gemerador.Adapter.TicketAdapter;
@@ -53,6 +60,7 @@ import okhttp3.Response;
 public class Inicio_User extends AppCompatActivity {
     private static final String PREFS_NAME = "NotificationPrefs";
     private static final String KEY_NOTIFICATIONS = "notifications";
+    private static final int REQUEST_NOTIFICATION_PERMISSION = 1234;
     private RecyclerView recyclerView;
     private TicketAdapter adapter;
     private List<Ticket> tickets;
@@ -82,6 +90,25 @@ public class Inicio_User extends AppCompatActivity {
         setupSearch();
         initializeNotifications();
         fetchTicketsFromMockAPI();
+        createNotificationChannel();
+        requestNotificationPermission();
+
+        Intent intent = getIntent();
+        if (intent.getBooleanExtra("showNotification", false)) {
+            String ticketId = intent.getStringExtra("notificationTicketId");
+            String status = intent.getStringExtra("notificationStatus");
+            String message = intent.getStringExtra("notificationMessage");
+            String priority = intent.getStringExtra("notificationPriority");
+
+            addNotification(ticketId, status, message, priority);
+        }
+    }
+    private void requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.POST_NOTIFICATIONS}, REQUEST_NOTIFICATION_PERMISSION);
+            }
+        }
     }
 
     private void initializeViews() {
@@ -729,6 +756,30 @@ public class Inicio_User extends AppCompatActivity {
         super.onDestroy();
         if (trabajadorService != null) {
             trabajadorService.cleanup();
+        }
+    }
+    private void createNotificationChannel() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Ticket Notifications";
+            String description = "Channel for Ticket notifications";
+            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            NotificationChannel channel = new NotificationChannel("ticket_channel", name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_NOTIFICATION_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permiso concedido, puedes proceder con las notificaciones
+                Toast.makeText(this, "Permiso de notificaciones concedido", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permiso denegado, informa al usuario o toma acciones alternativas
+                Toast.makeText(this, "Permiso de notificaciones denegado", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

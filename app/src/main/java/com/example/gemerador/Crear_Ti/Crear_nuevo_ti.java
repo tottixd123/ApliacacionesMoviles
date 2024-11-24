@@ -1,14 +1,18 @@
 package com.example.gemerador.Crear_Ti;
 
 
+import android.Manifest;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Base64;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -19,6 +23,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+
 import com.example.gemerador.Inicio_User.Inicio_User;
 import com.example.gemerador.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -261,13 +269,6 @@ public class Crear_nuevo_ti extends AppCompatActivity {
 
         return Bitmap.createScaledBitmap(original, newWidth, newHeight, true);
     }
-    private String encodeImage(Bitmap bitmap) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 70, baos);
-        byte[] imageBytes = baos.toByteArray();
-        return Base64.encodeToString(imageBytes, Base64.DEFAULT);
-    }
-
     private void sendTicket() {
         if (!validateInput()) {
             return;
@@ -381,7 +382,13 @@ public class Crear_nuevo_ti extends AppCompatActivity {
                     runOnUiThread(() -> {
                         Toast.makeText(Crear_nuevo_ti.this,
                                 "Ticket creado exitosamente", Toast.LENGTH_SHORT).show();
-                        navigateToHome();
+                        try {
+                            String ticketNumber = ticketJson.getString("ticketNumber");
+                            String message = "Su ticket #" + ticketNumber + " ha sido creado exitosamente.";
+                            sendConfirmationNotification(ticketNumber, message);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     });
                 } else {
                     runOnUiThread(() -> {
@@ -391,6 +398,41 @@ public class Crear_nuevo_ti extends AppCompatActivity {
                 }
             }
         });
+    }
+    private void sendConfirmationNotification(String ticketNumber, String message) {
+        String priority = prioritySpinner.getSelectedItem().toString();
+        // Mostrar notificación del sistema
+        showSystemNotification(ticketNumber, message);
+        Intent intent = new Intent(this, Inicio_User.class);
+        intent.putExtra("showNotification", true);
+        intent.putExtra("notificationTicketId", ticketNumber);
+        intent.putExtra("notificationStatus", "Creado");
+        intent.putExtra("notificationMessage", message);
+        intent.putExtra("notificationPriority", priority);
+        startActivity(intent);
+        finish();
+    }
+    private void showSystemNotification(String ticketNumber, String message) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "ticket_channel")
+                .setSmallIcon(R.drawable.notticket) // Asegúrate de tener este icono
+                .setContentTitle("Nuevo Ticket Creado")
+                .setContentText(message)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        // Crear un intent para abrir la aplicación cuando se toque la notificación
+        Intent intent = new Intent(this, Inicio_User.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        builder.setContentIntent(pendingIntent);
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
+        // Mostrar la notificación
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) == PackageManager.PERMISSION_GRANTED) {
+            notificationManager.notify(Integer.parseInt(ticketNumber.replaceAll("\\D+","")), builder.build());
+        } else {
+            // Manejar el caso cuando no se tienen permisos
+            Log.e("Notification", "No permission to post notifications");
+        }
     }
     private void incrementTicketCounter() {
         ticketCounter++;

@@ -44,13 +44,14 @@ public class TrabajadorTicketsAdapter extends RecyclerView.Adapter<TrabajadorTic
     }
 
     static class TicketViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTitle, tvStatus, tvDescription;
+        TextView tvTitle, tvStatus, tvDescription,tvCreator;
 
         TicketViewHolder(@NonNull View itemView) {
             super(itemView);
             tvTitle = itemView.findViewById(R.id.tvTicketTitle);
             tvStatus = itemView.findViewById(R.id.tvTicketStatus);
             tvDescription = itemView.findViewById(R.id.tvTicketDescription);
+            tvCreator = itemView.findViewById(R.id.tvTicketCreator);
         }
 
         void bind(Ticket ticket, OnTicketClickListener listener) {
@@ -64,6 +65,7 @@ public class TrabajadorTicketsAdapter extends RecyclerView.Adapter<TrabajadorTic
             tvDescription.setText(String.format("%s\n%s",
                     ticket.getArea_problema(),
                     ticket.getDetalle()));
+            tvCreator.setText("Creado por: " + ticket.getCreatedBy());
 
             itemView.setOnClickListener(v -> listener.onTicketClick(ticket));
         }

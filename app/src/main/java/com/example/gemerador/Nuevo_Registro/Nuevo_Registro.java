@@ -174,8 +174,8 @@ public class Nuevo_Registro extends AppCompatActivity {
                     .addOnSuccessListener(aVoid -> {
                         Log.d("Firebase", "Solicitud guardada exitosamente");
                         Toast.makeText(Nuevo_Registro.this,
-                                "Solicitud de registro enviada exitosamente",
-                                Toast.LENGTH_SHORT).show();
+                                "Solicitud enviada. Nos pondremos en contacto en máximo 48 horas hábiles para brindar las credenciales.",
+                                Toast.LENGTH_LONG).show();
                         limpiarCampos();
                         isProcessing = false;
                         finish();
