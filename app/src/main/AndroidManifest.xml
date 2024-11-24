@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:name=".MyApplication"
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher1"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher1_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Gemerador"
+        tools:targetApi="31">
+        <activity
+            android:name=".Reporte.TicketReportActivity"
+            android:exported="false"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
+        <activity
+            android:name=".login.ForgotPasswordActivity"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+            android:windowSoftInputMode="adjustResize" />
+        <activity
+            android:name=".Lista.UserListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Gestion.GestionTicketsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Trabajador.TrabajadorTicketDetailActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Trabajador.TrabajadorMenu"
+            android:exported="false" />
+        <activity
+            android:name=".Trabajador.TrabajadorTicketActivity"
+            android:exported="false" />
+        <activity
+            android:name=".Trabajador.TrabajadorManagement"
+            android:exported="false" />
+        <activity
+            android:name=".Crear_Ti.TicketDetail"
+            android:exported="false" />
+        <activity
+            android:name=".Adapter.TicketAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AutoCrearUsuario"
+            android:exported="false"
+            android:parentActivityName=".Admin.GestionSolicitudesActivity" />
+        <activity
+            android:name=".Admin.GestionSolicitudesActivity"
+            android:exported="false" />
+        <activity
+            android:name=".User_Admin.AdminUserManager"
+            android:exported="false" />
+        <activity
+            android:name=".Perfil.Perfil_user"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.AdminMenu"
+            android:exported="false" />
+        <activity
+            android:name=".Admin.Crear_User"
+            android:exported="false" />
+        <activity
+            android:name=".Crear_Ti.Crear_nuevo_ti"
+            android:exported="false" />
+        <activity
+            android:name=".Inicio_User.Images_de_fallos"
+            android:exported="false" />
+        <activity
+            android:name=".Inicio_User.Inicio_User"
+            android:exported="false" />
+        <activity
+            android:name=".Nuevo_Registro.Nuevo_Registro"
+            android:exported="false" />
+        <activity
+            android:name=".login.Login"
+            android:exported="false"
+            android:theme="@style/PopupTheme" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
