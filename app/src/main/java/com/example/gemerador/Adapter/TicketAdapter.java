@@ -61,7 +61,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ViewHolder
         this.userRole = userRole;
         this.listener = listener;
     }
-
     // Constructor simple para compatibilidad
     public TicketAdapter(List<Ticket> tickets) {
 
@@ -72,7 +71,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ViewHolder
         this.filteredTickets = new ArrayList<>(newTickets);
         notifyDataSetChanged();
     }
-
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -115,7 +113,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ViewHolder
                 .setDuration(300)
                 .start();
     }
-
     private void setupBasicInfo(@NonNull ViewHolder holder, Ticket ticket) {
         holder.tvTicketNumber.setText("Ticket #" + safeString(ticket.getTicketNumber(), "Sin número"));
         holder.tvCreator.setText("Creado por: " + safeString(ticket.getCreatedBy(), "Usuario desconocido"));
@@ -125,7 +122,6 @@ public class TicketAdapter extends RecyclerView.Adapter<TicketAdapter.ViewHolder
         holder.tvDetails.setText("Detalle: " + safeString(ticket.getDetalle(), "Sin detalles"));
         holder.tvPriority.setText("Prioridad: " + safeString(ticket.getPriority(), "Normal"));
     }
-
     private void setupStatusAndWorkerInfo(@NonNull ViewHolder holder, Ticket ticket) {
         // Configurar estado y color
         String status = safeString(ticket.getStatus(), "Pendiente");

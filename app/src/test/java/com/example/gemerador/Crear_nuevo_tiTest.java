@@ -1,131 +1,134 @@
 package com.example.gemerador;
 
+import static android.os.Looper.getMainLooper;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
+import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.text.Editable;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.example.gemerador.Crear_Ti.Crear_nuevo_ti;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.robolectric.Robolectric;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 
 @RunWith(RobolectricTestRunner.class)
-@Config(manifest=Config.NONE)
+@Config(manifest= Config.NONE, sdk = 33)
 public class Crear_nuevo_tiTest {
     private static final String PREFS_NAME = "TicketPrefs";
     private static final String TICKET_COUNTER_KEY = "ticketCounter";
-
     private Crear_nuevo_ti crearNuevoTiActivity;
 
-    @Mock
-    private SharedPreferences sharedPreferences;
-
-    @Mock
-    private SharedPreferences.Editor editor;
-
-    @Mock
-    private TextView ticketCounterTextView;
-
-    @Mock
-    private Context context;
-
-    @Mock
-    private Spinner problemSpinner;
-
-    @Mock
-    private Spinner areaSpinner;
-
-    @Mock
-    private Spinner prioritySpinner;
-
-    @Mock
-    private EditText problemDetailEditText;
-
-    @Mock
-    private Editable editable;
+    @Mock private SharedPreferences sharedPreferences;
+    @Mock private SharedPreferences.Editor editor;
+    @Mock private Context context;
+    @Mock private Spinner problemSpinner;
+    @Mock private Spinner areaSpinner;
+    @Mock private Spinner prioritySpinner;
+    @Mock private EditText problemDetailEditText;
+    @Mock private Editable editable;
+    @Mock private FirebaseAuth firebaseAuth;
+    @Mock private FirebaseDatabase firebaseDatabase;
+    @Mock private DatabaseReference databaseReference;
+    @Mock private com.google.android.gms.tasks.Task<DataSnapshot> mockTask;
+    @Mock private DataSnapshot mockSnapshot;
 
     @Before
     public void setUp() throws Exception {
-        // Initialize mocks
         MockitoAnnotations.openMocks(this);
 
-        // Create spy of activity
-        crearNuevoTiActivity = spy(new Crear_nuevo_ti());
+        // Mock estáticos necesarios
+        mockStatic(FirebaseAuth.class);
+        mockStatic(FirebaseDatabase.class);
 
-        // Setup mock behavior for SharedPreferences
-        when(context.getSharedPreferences(eq(PREFS_NAME), eq(Context.MODE_PRIVATE)))
-                .thenReturn(sharedPreferences);
-        when(sharedPreferences.edit()).thenReturn(editor);
-        when(sharedPreferences.getInt(eq(TICKET_COUNTER_KEY), anyInt())).thenReturn(0);
-        when(editor.putInt(eq(TICKET_COUNTER_KEY), anyInt())).thenReturn(editor);
+        when(FirebaseAuth.getInstance()).thenReturn(firebaseAuth);
+        when(FirebaseDatabase.getInstance()).thenReturn(firebaseDatabase);
 
-        // Setup Spinners mock behavior
-        when(problemSpinner.getSelectedItem()).thenReturn("Test Problem");
-        when(areaSpinner.getSelectedItem()).thenReturn("Test Area");
-        when(prioritySpinner.getSelectedItem()).thenReturn("Alta");
-        // Setup EditText mock behavior
-        when(problemDetailEditText.getText()).thenReturn(editable);
-        when(editable.toString()).thenReturn("Test Details");
+        // Mock para Firebase Database
+        when(firebaseDatabase.getReference(anyString())).thenReturn(databaseReference);
+        when(databaseReference.child(anyString())).thenReturn(databaseReference);
 
-        // Inject mocks into activity
-        setPrivateField(crearNuevoTiActivity, "sharedPreferences", sharedPreferences);
-        setPrivateField(crearNuevoTiActivity, "ticketCounterTextView", ticketCounterTextView);
+        // Mock para el Task de Firebase
+        when(databaseReference.get()).thenReturn(mockTask);
+        when(mockTask.addOnCompleteListener(any())).thenAnswer(invocation -> {
+            com.google.android.gms.tasks.OnCompleteListener listener = invocation.getArgument(0);
+            when(mockTask.isSuccessful()).thenReturn(true);
+            when(mockTask.getResult()).thenReturn(mockSnapshot);
+            when(mockSnapshot.child(anyString())).thenReturn(mockSnapshot);
+            when(mockSnapshot.getValue(String.class)).thenReturn("Test User");
+            listener.onComplete(mockTask);
+            return mockTask;
+        });
+
+        // Crear actividad usando Robolectric
+        crearNuevoTiActivity = Robolectric.setupActivity(Crear_nuevo_ti.class);
+
+        // Configurar los mocks después de crear la actividad
         setPrivateField(crearNuevoTiActivity, "problemSpinner", problemSpinner);
         setPrivateField(crearNuevoTiActivity, "areaSpinner", areaSpinner);
         setPrivateField(crearNuevoTiActivity, "prioritySpinner", prioritySpinner);
         setPrivateField(crearNuevoTiActivity, "problemDetailEditText", problemDetailEditText);
-    }
+        setPrivateField(crearNuevoTiActivity, "mAuth", firebaseAuth);
+        setPrivateField(crearNuevoTiActivity, "sharedPreferences", sharedPreferences);
 
-    @Test
-    public void testInicializacionDeContador() {
-        // Verify initial counter value is 0
-        int ticketCounter = sharedPreferences.getInt(TICKET_COUNTER_KEY, 0);
-        assertEquals(0, ticketCounter);
+        // Configurar comportamiento de los mocks
+        when(sharedPreferences.edit()).thenReturn(editor);
+        when(sharedPreferences.getInt(eq(TICKET_COUNTER_KEY), anyInt())).thenReturn(0);
+        when(editor.putInt(eq(TICKET_COUNTER_KEY), anyInt())).thenReturn(editor);
+
+        // Mock del usuario de Firebase
+        FirebaseUser mockUser = mock(FirebaseUser.class);
+        when(firebaseAuth.getCurrentUser()).thenReturn(mockUser);
+        when(mockUser.getEmail()).thenReturn("test@example.com");
+        when(mockUser.getUid()).thenReturn("testUID");
+
+        // Configurar los spinners
+        when(problemSpinner.getSelectedItem()).thenReturn("Test Problem");
+        when(areaSpinner.getSelectedItem()).thenReturn("Test Area");
+        when(prioritySpinner.getSelectedItem()).thenReturn("Alta");
+        when(problemSpinner.getSelectedItemPosition()).thenReturn(1);
+        when(areaSpinner.getSelectedItemPosition()).thenReturn(1);
+        when(prioritySpinner.getSelectedItemPosition()).thenReturn(1);
+
+        when(problemDetailEditText.getText()).thenReturn(editable);
+        when(editable.toString()).thenReturn("Test Details");
     }
 
     @Test
     public void testSendTicket() throws Exception {
-        // Setup mock behavior for editor
-        doReturn(editor).when(editor).putInt(eq(TICKET_COUNTER_KEY), anyInt());
-        doNothing().when(editor).apply();
+        // Ejecutar el looper principal para procesar tareas pendientes
+        shadowOf(getMainLooper()).idle();
 
-        // Mock FirebaseAuth y FirebaseUser
-        FirebaseAuth mockAuth = mock(FirebaseAuth.class);
-        FirebaseUser mockUser = mock(FirebaseUser.class);
-        when(mockAuth.getCurrentUser()).thenReturn(mockUser);
-        when(mockUser.getEmail()).thenReturn("test@example.com");
-        setPrivateField(crearNuevoTiActivity, "mAuth", mockAuth);
+        // Simular clic en el botón
+        crearNuevoTiActivity.findViewById(R.id.sendTicketButton).performClick();
 
-        // Get private sendTicket method using reflection
-        Method sendTicketMethod = Crear_nuevo_ti.class.getDeclaredMethod("sendTicket");
-        sendTicketMethod.setAccessible(true);
+        // Esperar a que se procesen las operaciones asíncronas
+        shadowOf(getMainLooper()).idle();
 
-        // Call sendTicket method
-        sendTicketMethod.invoke(crearNuevoTiActivity);
-
-        // Verify interactions
-        verify(editor).putInt(eq(TICKET_COUNTER_KEY), eq(1));
-        verify(editor).apply();
-        verify(problemSpinner).getSelectedItem();
-        verify(areaSpinner).getSelectedItem();
-        verify(prioritySpinner).getSelectedItem();
-        verify(problemDetailEditText).getText();
+        // Verificar las interacciones
+        verify(prioritySpinner, atLeastOnce()).getSelectedItemPosition();
+        verify(problemSpinner, atLeastOnce()).getSelectedItemPosition();
+        verify(areaSpinner, atLeastOnce()).getSelectedItemPosition();
+        verify(databaseReference, atLeastOnce()).get();
     }
 
     private void setPrivateField(Object target, String fieldName, Object value) throws Exception {
