@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
+            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
             <!-- Imagen de perfil -->
@@ -125,9 +126,9 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginStart="80dp"
+                        android:layout_marginStart="40dp"
                         android:layout_marginTop="1dp"
-                        android:layout_marginEnd="75dp"
+                        android:layout_marginEnd="40dp"
                         android:layout_weight="1"
                         android:background="@drawable/admincerrar"
                         android:backgroundTint="#068f41"
@@ -141,18 +142,6 @@
                         app:layout_constraintStart_toStartOf="parent" />
 
                 </RelativeLayout>
-            </LinearLayout>
-
-            <!-- Cerrar Sesión card -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="40dp"
-                android:layout_marginEnd="20dp"
-                android:background="@drawable/ausercard"
-                android:orientation="vertical"
-                android:padding="15dp">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -165,9 +154,9 @@
                         android:layout_alignParentStart="true"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:layout_marginStart="80dp"
-                        android:layout_marginTop="1dp"
-                        android:layout_marginEnd="75dp"
+                        android:layout_marginStart="40dp"
+                        android:layout_marginTop="20dp"
+                        android:layout_marginEnd="45dp"
                         android:layout_weight="1"
                         android:background="@drawable/admincerrar"
                         android:backgroundTint="#068f41"
@@ -182,6 +171,8 @@
 
                 </RelativeLayout>
             </LinearLayout>
+
+            <!-- Cerrar Sesión card -->
 
         </LinearLayout>
     </ScrollView>

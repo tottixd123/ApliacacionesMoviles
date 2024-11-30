@@ -36,7 +36,7 @@
                 android:elevation="12dp"
                 android:fontFamily="serif"
                 android:gravity="center"
-                android:text="HOLA ADMINISTARDOR"
+                android:text="HOLA ADMINISTRADOR"
                 android:textColor="#13814b"
                 android:textSize="20sp"
                 android:textStyle="bold" />

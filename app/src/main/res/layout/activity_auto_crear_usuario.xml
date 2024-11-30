@@ -15,6 +15,7 @@
         android:layout_width="match_parent"
         android:layout_height="670dp"
         android:gravity="center"
+        android:fitsSystemWindows="true"
         android:orientation="vertical">
 
         <TextView

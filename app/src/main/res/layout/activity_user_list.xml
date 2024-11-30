@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:background="#FFFFFF"
+    android:fitsSystemWindows="true"
     tools:context=".Lista.UserListActivity">
 
     <TextView
@@ -14,10 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
         android:layout_marginStart="104dp"
-        android:layout_marginTop="47dp"
+        android:layout_marginTop="10dp"
         android:layout_marginEnd="109dp"
         android:text="Lista de Usuarios"
-        android:textColor="#13814b"
+        android:textColor="#000000"
         android:textSize="24sp"
         android:textStyle="bold" />
 

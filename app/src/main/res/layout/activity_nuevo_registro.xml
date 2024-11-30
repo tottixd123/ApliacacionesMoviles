@@ -18,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
             android:orientation="vertical">
 
             <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,7 +29,7 @@
                     android:id="@+id/toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="56dp"
-                    android:layout_marginTop="28dp"
+                    android:layout_marginTop="1dp"
                     android:background="#068f41"
                     android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +46,8 @@
                         android:padding="19dp"
                         android:rotation="180"
                         android:src="@drawable/right_arrow"
-                        android:tint="#FFFFFF"
-                        android:translationX="-30dp" />
+                        android:translationX="-30dp"
+                        app:tint="#FFFFFF" />
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -105,7 +106,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/abordersolicitudes"
                     android:orientation="vertical"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"

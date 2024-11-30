@@ -6,6 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
+    android:fitsSystemWindows="true"
     tools:context=".MainActivity">
 
     <ImageView
@@ -14,7 +15,7 @@
         android:layout_height="297dp"
         android:layout_alignParentTop="true"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="2dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.478"
@@ -74,7 +75,7 @@
         android:layout_marginStart="52dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="50dp"
-        android:backgroundTint="#032100"
+        android:backgroundTint="#0e6558"
         android:text="SOLICITUD DE REGISTRO" />
 
     <Button

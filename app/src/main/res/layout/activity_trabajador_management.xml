@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:padding="16dp"
+    android:fitsSystemWindows="true"
     tools:context=".Trabajador.TrabajadorManagement">
 
     <TextView

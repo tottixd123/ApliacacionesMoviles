@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="12dp"
+    android:layout_height="wrap_content"
+    android:padding="5dp"
     tools:context=".login.Login">
 
     <androidx.appcompat.widget.Toolbar
@@ -22,13 +22,13 @@
 
         <ImageView
             android:id="@+id/atras_soli"
-            android:layout_width="wrap_content"
+            android:layout_width="60dp"
             android:layout_height="wrap_content"
             android:contentDescription="Back button"
-            android:tint="@color/white"
             android:padding="19dp"
             android:rotation="180"
-            android:src="@drawable/right_arrow" />
+            android:src="@drawable/right_arrow"
+            app:tint="@color/white" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -45,13 +45,13 @@
         android:id="@+id/textViewTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
+        android:layout_marginTop="15dp"
         android:text="Iniciar Sesión"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
         app:layout_goneMarginTop="16dp" />
 
     <ImageView
@@ -69,7 +69,9 @@
         android:id="@+id/editTextText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="12dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/rounded_edittext_background"
         android:hint="Usuario"
         android:inputType="text"
@@ -83,7 +85,9 @@
         android:id="@+id/editTextTextPassword"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="4dp"
         android:background="@drawable/rounded_edittext_password_background"
         android:hint="Contraseña"
         android:inputType="textPassword"
@@ -92,25 +96,29 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextText" />
+
     <CheckBox
         android:id="@+id/checkBoxRemember"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
         android:layout_marginTop="24dp"
         android:text="Recuérdame"
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/editTextTextPassword" />
+
     <TextView
         android:id="@+id/textView_olvido_contrasena"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="4dp"
         android:text="@string/text_olvido_contrasena"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintTop_toTopOf="@id/checkBoxRemember"
         app:layout_constraintBottom_toBottomOf="@id/checkBoxRemember"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/checkBoxRemember" />
 
     <Button
         android:id="@+id/btn_inicio"
@@ -129,8 +137,8 @@
         android:id="@+id/button2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:backgroundTint="#032100"
+        android:layout_marginTop="8dp"
+        android:backgroundTint="#0e6558"
         android:text="SOLICITAR MI REGISTRO"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
