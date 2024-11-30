@@ -1,6 +1,5 @@
 package com.example.gemerador.Crear_Ti;
 
-
 import android.Manifest;
 import android.app.PendingIntent;
 import android.content.Intent;
